@@ -1,0 +1,7 @@
+# ThroughMark clean-room config (read by ci/check_provenance.sh; honored by the guardrail/tag skill).
+DDR_LOG=docs/DDR.md            # where Design Decision Records live (a file, or your ADR path)
+TRACE_SOURCE=branch           # branch | ticket | none — how the Trace id is seeded
+SESSION_SUMMARY=off           # on | off — end-of-session summary
+# --- Tier 2 (two-room screening) only; NOT used by the single-room MVP ---
+# CORPUS_DIR=ci/reference-corpus
+# TOKEN_THRESHOLD=15

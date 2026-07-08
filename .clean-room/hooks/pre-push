@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# ThroughMark clean-room pre-push hook: run the provenance gate before a push is allowed.
+# Bypass in an emergency with:  git push --no-verify
+set -e
+ROOT="$(git rev-parse --show-toplevel)"
+if [ -f "$ROOT/ci/check_provenance.sh" ]; then
+  bash "$ROOT/ci/check_provenance.sh" . "${DDR_LOG:-docs/DDR.md}" || {
+    echo "clean-room: provenance gate failed — fix the items above before pushing (or 'git push --no-verify' to override)."; exit 1; }
+fi
+# team logging: bind this push to its captured AI sessions, if the capture agent is installed
+[ -x "$HOME/.clean-room/bin/pr_manifest.sh" ] && bash "$HOME/.clean-room/bin/pr_manifest.sh" "$ROOT" >/dev/null 2>&1 || true
+exit 0

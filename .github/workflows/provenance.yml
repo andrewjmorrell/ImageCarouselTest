@@ -1,0 +1,17 @@
+# ThroughMark clean-room — provenance gate as a required CI check.
+# Installed to .github/workflows/provenance.yml. Runs the deterministic gate on every PR and push to the
+# default branch. Make it a REQUIRED status check in branch protection so a failing gate blocks merge.
+name: clean-room-provenance
+on:
+  pull_request:
+  push:
+    branches: [ main, master ]
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0          # full history so the baseline cut-line diff works
+      - name: Provenance gate
+        run: bash ci/check_provenance.sh . docs/DDR.md
